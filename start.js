@@ -1,3 +1,5 @@
+const random = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
+
 const setup = () => {
   const canvas = document.getElementById('falling-snow-canvas')
   canvas.width = window.innerWidth
@@ -6,11 +8,9 @@ const setup = () => {
   return {
     canvas,
     canvasContext: canvas?.getContext('2d'),
-    numSnowBalls: 250,
+    numSnowBalls: Math.floor((canvas.width * canvas.height) / 2400),
   }
 }
-
-const random = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
 
 const createSnowBalls = (canvas, numSnowBalls) => {
   return [...Array(numSnowBalls)].map(() => ({
@@ -36,14 +36,23 @@ const moveSnowBall = (canvas, snowBall) => {
   snowBall.y = (snowBall.y + snowBall.speedY + canvas.height) % canvas.height
 }
 
+let timer
+
 const run = () => {
   const { canvas, canvasContext, numSnowBalls } = setup()
   const snowBalls = createSnowBalls(canvas, numSnowBalls)
-  setInterval(() => {
+  timer = setInterval(() => {
     canvasContext.clearRect(0, 0, canvas.width, canvas.height)
     snowBalls.forEach(snowBall => drawSnowBall(canvasContext, snowBall))
     snowBalls.forEach(snowBall => moveSnowBall(canvas, snowBall))
   }, 50)
 }
+
+const resizeCanvas = () => {
+  clearInterval(timer)
+  run()
+}
+
+window.addEventListener('resize', resizeCanvas, false)
 
 run()

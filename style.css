@@ -1,4 +1,14 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
 body {
   background-image: url('./forest_mountains.jpg');
   background-size: cover;
+  background-repeat: no-repeat;
+}
+
+canvas {
+  display: block;
 }
